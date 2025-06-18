@@ -1,0 +1,48 @@
+.background {
+ background-image: url("https://img.freepik.com/free-vector/happy-new-year-backgroundwith-clock_1048-3405.jpg?
+t=st=1745297797~exp=1745301397~hmac=c43f4697db8f15b067439a62924193452b553f77fd5
+5f5a9c59534f5f683172e&w=900");
+ height: 80vh;
+}
+
+body {
+ font-family: Arial, sans-serif;
+ background-color: #f0f0f0;
+}
+
+.container {
+ width: 80%;
+ margin: 40px auto;
+ text-align: center;
+ padding: 50px;
+}
+
+.timer-display {
+ display: flex;
+ justify-content: space-around;
+ margin-top: 20px;
+}
+.timer-unit {
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ justify-content: center;
+ width: 150px;
+ height: 150px;
+ border-radius: 10px;
+ background-color: #fff;
+ box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+ margin: 10px;
+}
+
+.timer-unit span:first-child {
+ font-size: 36px;
+ font-weight: bold;
+}
+
+#message {
+ font-size: 24px;
+ font-weight: bold;
+ color: #666;
+ margin-top: 20px;
+}
