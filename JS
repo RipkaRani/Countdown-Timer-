@@ -1,0 +1,140 @@
+// Get the target date input element
+const targetDateInput = document.getElementById('target-date');
+// Get the start button element
+const startBtn = document.getElementById('start-btn');
+// Get the timer display elements
+const daysElement = document.getElementById('days');
+const hoursElement = document.getElementById('hours');
+const minutesElement = document.getElementById('minutes');
+const secondsElement = document.getElementById('seconds');
+// Get the message element
+const messageElement = document.getElementById('message');
+// Initialize the interval ID
+let intervalId;
+let paused = false;
+let stopped = false;
+let timeRemainingWhenPaused;
+// Function to start the countdown
+function startCountdown() {
+ stopped = false;
+ paused = false;
+ // Get the target date
+ const targetDate = new Date(targetDateInput.value);
+ // Check if the target date is valid
+ if (isNaN(targetDate.getTime())) {
+ messageElement.textContent = 'Invalid date';
+ return;
+}
+ // Calculate the time remaining
+ function calculateTimeRemaining() {
+ if (paused || stopped) {
+ return;
+ }
+const currentTime = new Date();
+ const timeRemaining = targetDate.getTime() - currentTime.getTime();
+ // Check if the target time has been reached
+ if (timeRemaining <= 0) {
+ clearInterval(intervalId);
+ messageElement.textContent = 'Time\'s up!';
+ return;
+ }
+// Calculate the days, hours, minutes, and seconds
+ const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+ const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+ const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+ const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+ // Update the timer display
+ daysElement.textContent = days;
+ hoursElement.textContent = hours.toString().padStart(2, '0');
+ minutesElement.textContent = minutes.toString().padStart(2, '0');
+ secondsElement.textContent = seconds.toString().padStart(2, '0');
+ }
+ // Update the timer display every second
+ intervalId = setInterval(calculateTimeRemaining, 1000);
+}
+// Function to pause the countdown
+function pauseCountdown() {
+ paused = true;
+ timeRemainingWhenPaused = getRemainingTime();
+}
+// Function to resume the countdown
+function resumeCountdown(targetDate) {
+ paused = false;
+ const newTargetDate = new Date(targetDate.getTime() + timeRemainingWhenPaused);
+ intervalId = setInterval(() => {
+ if (paused || stopped) {
+ return;
+ }
+ const currentTime = new Date();
+const timeRemaining = newTargetDate.getTime() - currentTime.getTime();
+ // Check if the target time has been reached
+ if (timeRemaining <= 0) {
+ clearInterval(intervalId);
+ messageElement.textContent = 'Time\'s up!';
+ return;
+ }
+// Calculate the days, hours, minutes, and seconds
+ const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+ const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+ const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+ const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+ // Update the timer display
+ daysElement.textContent = days;
+ hoursElement.textContent = hours.toString().padStart(2, '0');
+ minutesElement.textContent = minutes.toString().padStart(2, '0');
+ secondsElement.textContent = seconds.toString().padStart(2, '0');
+ }, 1000);
+}
+// Function to get the remaining time
+function getRemainingTime() {
+ const days = parseInt(daysElement.textContent);
+ const hours = parseInt(hoursElement.textContent);
+ const minutes = parseInt(minutesElement.textContent);
+ const seconds = parseInt(secondsElement.textContent);
+ return (days * 24 * 60 * 60 * 1000) + (hours * 60 * 60 * 1000) + (minutes * 60 * 1000) +
+(seconds * 1000);
+}
+// Function to stop the countdown
+function stopCountdown() {
+ stopped = true;
+ clearInterval(intervalId);
+ daysElement.textContent = '0';
+ hoursElement.textContent = '00';
+ minutesElement.textContent = '00';
+ secondsElement.textContent = '00';
+ messageElement.textContent = 'Countdown stopped';
+}
+// Add event listener to the start button
+startBtn.addEventListener('click', () => {
+ // Clear any existing interval
+ if (intervalId) {
+ clearInterval(intervalId);
+ }
+// Reset the message element
+ messageElement.textContent = '';
+ // Start the countdown
+ startCountdown();
+});
+// Add event listener to pause button (assuming you have a pause button with id 'pause-btn')
+const pauseBtn = document.getElementById('pause-btn');
+pauseBtn.addEventListener('click', () => {
+ pauseCountdown();
+ messageElement.textContent = 'Countdown paused';
+});
+// Add event listener to stop button (assuming you have a stop button with id 'stop-btn')
+const stopBtn = document.getElementById('stop-btn');
+stopBtn.addEventListener('click', stopCountdown);
+// Function to clear the countdown
+function clearCountdown() {
+ stopped = true;
+ clearInterval(intervalId);
+ targetDateInput.value = '';
+ daysElement.textContent = '0';
+ hoursElement.textContent = '0';
+minutesElement.textContent = '0';
+ secondsElement.textContent = '0';
+ messageElement.textContent = '';
+}
+// Add event listener to clear button (assuming you have a clear button with id 'clear-btn')
+const clearBtn = document.getElementById('clear-btn');
+clearBtn.addEventListener('click', clearCountdown);
